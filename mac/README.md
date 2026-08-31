@@ -26,11 +26,7 @@ Or:
 python3 app.py
 ```
 
-Drag to move. Press **Esc** or **⌘Q** to close (there is no close button; clicking ✕ used to crash Python on macOS).
-
-## Build a Mac app
-
-This must be run **on a Mac** (Windows cannot produce a `.app`).
+Drag to move. Press **Esc** or **⌘Q** to close.
 
 ```bash
 chmod +x build.sh
