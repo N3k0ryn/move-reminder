@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import sys
+import time
 import tkinter as tk
 from datetime import datetime
+from pathlib import Path
 from tkinter import font as tkfont
 
 WORK_START_HOUR = 9
@@ -71,12 +73,43 @@ def slot_index(now: datetime) -> int:
 
 
 def local_now() -> datetime:
+    try:
+        time.tzset()
+    except (AttributeError, OSError):
+        pass
     return datetime.now().astimezone()
 
 
+def _iana_zone() -> str:
+    try:
+        resolved = Path("/etc/localtime").resolve()
+        parts = resolved.parts
+        if "zoneinfo" in parts:
+            i = parts.index("zoneinfo")
+            return "/".join(parts[i + 1 :])
+    except OSError:
+        return ""
+    return ""
+
+
 def tz_label(now: datetime) -> str:
-    name = (now.tzname() or "").strip()
-    return name if name else "local"
+    for raw in (now.strftime("%Z"), now.tzname()):
+        label = (raw or "").strip()
+        if label:
+            return label
+    isdst = time.localtime().tm_isdst > 0
+    names = time.tzname
+    if names:
+        pick = names[1] if isdst and len(names) > 1 else names[0]
+        if pick:
+            return pick
+    iana = _iana_zone()
+    if iana:
+        return iana
+    key = getattr(now.tzinfo, "key", None)
+    if key:
+        return str(key)
+    return "local"
 
 
 def status_for(now: datetime) -> tuple[str, str, str, int]:
@@ -136,10 +169,17 @@ class MoveReminderApp:
 
         self.canvas.bind("<ButtonPress-1>", self._start_drag)
         self.canvas.bind("<B1-Motion>", self._on_drag)
-        self.root.bind("<Escape>", lambda _e: self.root.destroy())
+        self.root.bind("<Escape>", lambda _e: self._quit())
+        try:
+            self.root.createcommand("tk::mac::Quit", self._quit)
+        except tk.TclError:
+            pass
 
         self._draw_static_ids()
         self._schedule()
+
+    def _quit(self) -> None:
+        self.root.after_idle(self.root.destroy)
 
     def _place_top_center(self) -> None:
         self.root.update_idletasks()
@@ -228,15 +268,6 @@ class MoveReminderApp:
             width=inner_w,
             text="",
         )
-        self.close_hit = self.canvas.create_text(
-            self.width - 16,
-            14,
-            anchor="ne",
-            fill="#ffffff",
-            font=self._font(16),
-            text="✕",
-        )
-        self.canvas.tag_bind(self.close_hit, "<Button-1>", lambda _e: self.root.destroy())
 
     def _hex(self, r: float, g: float, b: float) -> str:
         def c(v: float) -> int:

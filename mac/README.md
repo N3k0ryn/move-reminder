@@ -26,7 +26,7 @@ Or:
 python3 app.py
 ```
 
-Drag to move. Click **✕** or press **Esc** to close.
+Drag to move. Press **Esc** or **⌘Q** to close (there is no close button; clicking ✕ used to crash Python on macOS).
 
 ## Build a Mac app
 
