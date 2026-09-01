@@ -9,9 +9,6 @@ Copy this `mac` folder to the Mac. Same behavior as the Windows app: ~3" tall ×
    - **Best:** install Python from [python.org](https://www.python.org/downloads/macos/). That build includes Tk.
    - **Homebrew:** `brew install python` is not enough by itself — also `brew install python-tk`.
    - Check: `python3 -c "import tkinter; print(tkinter.TkVersion)"`
-3. No extra pip modules.
-
-Optional: **Accessibility / Screen & System Audio** is not required. If the window never stays above other apps, check **System Settings → Desktop & Dock** and that you are not using a full-screen Space that hides floating windows.
 
 ## Run
 
@@ -27,6 +24,8 @@ python3 app.py
 ```
 
 Drag to move. Press **Esc** or **⌘Q** to close.
+
+This command turns it into an App. 
 
 ```bash
 chmod +x build.sh
