@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Move Reminder for macOS — always-on-top 3x4 inch strip with time and movement prompts."""
 
 from __future__ import annotations
@@ -112,6 +113,15 @@ def tz_label(now: datetime) -> str:
     return "local"
 
 
+def hours_label() -> str:
+    def fmt(hour: int) -> str:
+        suffix = "AM" if hour < 12 else "PM"
+        h12 = hour % 12 or 12
+        return f"{h12}:00 {suffix}"
+
+    return f"{fmt(WORK_START_HOUR)} - {fmt(WORK_END_HOUR)}"
+
+
 def status_for(now: datetime) -> tuple[str, str, str, int]:
     slot = slot_index(now)
     motivation = MOTIVATIONS[slot % len(MOTIVATIONS)]
@@ -166,10 +176,16 @@ class MoveReminderApp:
         self._drag_x = 0
         self._drag_y = 0
         self._color_idx = 0
+        self._hidden = False
+        self._hide_slot = -1
 
         self.canvas.bind("<ButtonPress-1>", self._start_drag)
         self.canvas.bind("<B1-Motion>", self._on_drag)
-        self.root.bind("<Escape>", lambda _e: self._quit())
+        self.root.bind("<Escape>", lambda _e: self._request_hide())
+        self.root.bind_all("<Command-w>", lambda _e: self._request_hide())
+        self.root.bind_all("<Command-W>", lambda _e: self._request_hide())
+        self.root.bind_all("<Command-h>", lambda _e: self._request_hide())
+        self.root.bind_all("<Command-H>", lambda _e: self._request_hide())
         try:
             self.root.createcommand("tk::mac::Quit", self._quit)
         except tk.TclError:
@@ -181,16 +197,36 @@ class MoveReminderApp:
     def _quit(self) -> None:
         self.root.after_idle(self.root.destroy)
 
+    def _request_hide(self, _event: tk.Event | None = None) -> None:
+        self.root.after_idle(self._hide)
+
+    def _hide(self) -> None:
+        if self._hidden:
+            return
+        self._hidden = True
+        self._hide_slot = slot_index(local_now())
+        self.root.withdraw()
+
+    def _show(self) -> None:
+        if not self._hidden:
+            return
+        self._hidden = False
+        self.root.deiconify()
+        self.root.lift()
+        self.root.attributes("-topmost", True)
+
+    def _start_drag(self, event: tk.Event) -> None:
+        if "hide" in self.canvas.gettags("current"):
+            return
+        self._drag_x = event.x_root - self.root.winfo_x()
+        self._drag_y = event.y_root - self.root.winfo_y()
+
     def _place_top_center(self) -> None:
         self.root.update_idletasks()
         sw = self.root.winfo_screenwidth()
         x = max(0, (sw - self.width) // 2)
         y = 28  # sit below the menu bar
         self.root.geometry(f"{self.width}x{self.height}+{x}+{y}")
-
-    def _start_drag(self, event: tk.Event) -> None:
-        self._drag_x = event.x_root - self.root.winfo_x()
-        self._drag_y = event.y_root - self.root.winfo_y()
 
     def _on_drag(self, event: tk.Event) -> None:
         x = event.x_root - self._drag_x
@@ -248,7 +284,7 @@ class MoveReminderApp:
             anchor="w",
             fill="#ffe8c8",
             font=self._font(13),
-            text="9:00 AM - 5:00 PM",
+            text=hours_label(),
         )
         self.motivation_line = self.canvas.create_text(
             pad,
@@ -268,6 +304,16 @@ class MoveReminderApp:
             width=inner_w,
             text="",
         )
+        self.hide_hit = self.canvas.create_text(
+            self.width - 14,
+            12,
+            anchor="ne",
+            fill="#fff8e7",
+            font=self._font(11),
+            text="Hide",
+            tags=("hide",),
+        )
+        self.canvas.tag_bind("hide", "<Button-1>", self._request_hide)
 
     def _hex(self, r: float, g: float, b: float) -> str:
         def c(v: float) -> int:
@@ -295,6 +341,7 @@ class MoveReminderApp:
     def _schedule(self) -> None:
         now = local_now()
         mode, message, motivation, color_idx = status_for(now)
+        slot = slot_index(now)
         if color_idx != self._color_idx:
             self._color_idx = color_idx
         self._paint_gradient(mode, color_idx)
@@ -308,9 +355,12 @@ class MoveReminderApp:
             self.date_line,
             text=f"{now.strftime('%A')}  ·  {now.strftime('%b %d, %Y')}",
         )
-        self.canvas.itemconfigure(self.hours_line, text="9:00 AM - 5:00 PM")
+        self.canvas.itemconfigure(self.hours_line, text=hours_label())
         self.canvas.itemconfigure(self.motivation_line, text=motivation)
         self.canvas.itemconfigure(self.prompt, text=message)
+
+        if self._hidden and mode == "active" and slot != self._hide_slot:
+            self._show()
 
         self.root.after(250, self._schedule)
 

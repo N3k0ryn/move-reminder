@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Build this spec on macOS:  python3 -m PyInstaller --noconfirm --clean MoveReminder.spec
+# Build on macOS:  python3 -m PyInstaller --noconfirm --clean MoveReminder.spec
 
 a = Analysis(
     ["app.py"],
@@ -24,7 +24,7 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=True,
@@ -38,7 +38,7 @@ coll = COLLECT(
     a.zipfiles,
     a.datas,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     name="Move Reminder",
 )
@@ -51,7 +51,9 @@ app = BUNDLE(
         "CFBundleName": "Move Reminder",
         "CFBundleDisplayName": "Move Reminder",
         "CFBundleShortVersionString": "1.0.0",
+        "CFBundleVersion": "1.0.0",
         "NSHighResolutionCapable": True,
         "LSUIElement": True,
+        "LSMinimumSystemVersion": "10.15",
     },
 )
