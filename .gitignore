@@ -1,0 +1,27 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller
+build/
+dist/
+
+# Environments
+.Python
+.env
+.venv/
+venv/
+ENV/
+*.egg-info/
+.eggs/
+
+# Caches and editors
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
