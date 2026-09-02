@@ -27,7 +27,7 @@ REMINDERS = (
     "Wall sit for 20-30 seconds",
     "Tricep dips off chair or floor - 8-10 reps",
     "On the floor: 12 Glute bridges",
-    "Standing side raises - 10 per leg",
+    "Standing side leg raises - 10 per leg",
     "Get that heart pumping! 20-30 jumping jacks!",
     "Stand up: Butt kicks for 30 seconds",
     "Shadow boxing for 30 seconds",
@@ -61,6 +61,26 @@ MOTIVATIONS = (
     "Progress, not perfection",
     "Straighten up, your back will thank you",
     "How are you feeling? Need to fill your water, get a snack?",
+    "Be a fucking weirdo. There's power in that",
+    "That thing you're self-conscious about is what makes you light up the fucking room",
+    "If you don't believe in yourself, how can you expect anyone else to?",
+    "Your wildest dream deserve a chance",
+    "Your in control. Your in control. Your in control.",
+    "There's no such thing as -the right time- Trust yourself and do it!",
+    "Everything you need to get it done is already inside of you",
+    "Your best is more than enough, I promise.",
+    "You are worthy of everything good in this life. Everything.",
+    "Sometimes letting go is the best way to free yourself",
+    "Don't take anyone's shit. You are to be respected. Always.",
+    "Drown out the fucking noise and keep doing you",
+    "The thinghs that you say to yourself matter. Be kind.",
+    "Choose you. Ecerytime.",
+    "Ask yourself if it will matter in 10 years. If it won't, don't sweat it.",
+    "Your opinions aren't tatoos. You can change them any time.",
+    "Your ending is still unwritten. It's never too late to create a life you love.",
+    "Don't forget to celebrate the silent battles that you fought and won",
+    "No one else is dwelling on your mistakes. Move the fuck on.",
+    "Tell the negative assholes in our head to sit in a corner for a lifelong timeout"
 )
 
 # Distinct looks so a new suggestion is obvious at a glance.
@@ -74,8 +94,14 @@ ACTIVE_PALETTES = (
     ((120, 230, 50), (30, 100, 40)),
 )
 
-OFF_HOURS = "Off the clock — rest, hydrate, and move when it feels good"
-WEEKEND = "Weekend — enjoy the rest; a short walk still counts"
+OFF_HOURS = (
+    "Off the clock — rest, hydrate, and move when it feels good",
+    "Take some time to enjoy the things you worked hard for!"
+)
+WEEKEND = (
+    "Weekend — enjoy the rest; a short walk still counts",
+    "If it is a showerless, stay in bed all day type of day, that's okay"
+)
 
 FONT_CANDIDATES = (
     "Helvetica Neue",
