@@ -19,15 +19,16 @@ REMINDERS = (
     "Walk it out — get those steps in",
     "Stand up: 10 air squats",
     "Desk push-ups or wall push-ups — 8–12",
-    "Stretch: neck, shoulders, hips",
+    "Stretch: neck, shoulders, back, hips",
     "Calf raises while you wait",
-    "Plank or dead hang for 20–30s",
+    "Drop a Plank for 20–30s",
     "March in place for one minute",
+    "High Knee March in place with Reach and Pull for 50 reps", 
 )
 
 MOTIVATIONS = (
     "A healthy body and mind keeps you grounded",
-    "Hydrate — have you yet?",
+    "Have you hydrated?",
     "You are doing great!",
     "Breathe and exhale your stress",
     "Remember you are the author of your life",
@@ -36,6 +37,7 @@ MOTIVATIONS = (
     "Show up for you — that’s enough",
     "Unclench your jaw. Drop your shoulders.",
     "Progress, not perfection",
+    "Straighten up, your back will thank you",
 )
 
 # Distinct looks so a new suggestion is obvious at a glance.
