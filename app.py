@@ -16,7 +16,6 @@ WORK_WEEKDAYS = {0, 1, 2, 3, 4}  # Monday–Friday
 ROTATE_MINUTES = 20
 
 REMINDERS = (
-    "Walk it out — get those steps in",
     "Stand up: 10 air squats",
     "Desk push-ups or wall push-ups — 8–12",
     "Stretch: neck, shoulders, back, hips",
@@ -44,10 +43,9 @@ REMINDERS = (
     "Balance: Bird dog - 10 each side",
     "Balance: Side plank - 20 seconds per side",
     "Shake it out! Full body shake for 15 seconds",
-    "How are you feeling? Meed to fill your water, get a snack?",
     "Look out the window at something outside, aim for 20+ feet away (eye strain break)",
     "Toe touches for 10 each side",
-    "Arm circle, big and small, 20 seconds of each"
+    "Arm circle, big and small, 20 seconds of each",
 )
 
 MOTIVATIONS = (
@@ -62,6 +60,7 @@ MOTIVATIONS = (
     "Unclench your jaw. Drop your shoulders.",
     "Progress, not perfection",
     "Straighten up, your back will thank you",
+    "How are you feeling? Need to fill your water, get a snack?",
 )
 
 # Distinct looks so a new suggestion is obvious at a glance.
