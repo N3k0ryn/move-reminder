@@ -56,6 +56,8 @@ To start at login: System Settings -> General -> Login Items -> add **Move Remin
 
 Hours, interval, and the daily tally are saved under `~/Library/Application Support/MoveReminder/`.
 
+Made with [Cursor](https://cursor.com) ♥.
+
 
 ## License
 

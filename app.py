@@ -13,6 +13,7 @@ from tkinter import font as tkfont
 
 APP_VERSION = "1.1.1"
 APP_NAME = "Move Reminder"
+MADE_WITH = "Made with Cursor ♥"
 
 DEFAULT_START_HOUR = 9
 DEFAULT_END_HOUR = 17
@@ -599,8 +600,17 @@ class MoveReminderApp:
             text="Setup",
             tags=("setup",),
         )
+        self.credit_line = self.canvas.create_text(
+            pad,
+            pad + 18,
+            anchor="nw",
+            fill="#ffe8c8",
+            font=self._font(9),
+            text=MADE_WITH,
+        )
         self.main_items = [
             self.title_line,
+            self.credit_line,
             self.clock,
             self.date_line,
             self.hours_line,
@@ -722,6 +732,15 @@ class MoveReminderApp:
             state="hidden",
             tags=("done",),
         )
+        self.settings_credit = self.canvas.create_text(
+            pad,
+            self.height - 12,
+            anchor="sw",
+            fill="#ffe8c8",
+            font=self._font(9),
+            text=MADE_WITH,
+            state="hidden",
+        )
         self.settings_items = [
             self.settings_title,
             self.start_label,
@@ -734,6 +753,7 @@ class MoveReminderApp:
             self.int20,
             self.int30,
             self.done_hit,
+            self.settings_credit,
         ]
         self.canvas.tag_bind("done", "<Button-1>", self._close_setup)
         self.canvas.tag_bind("start_down", "<Button-1>", lambda e: self._nudge_start(-1, e))
