@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 import time
 import tkinter as tk
@@ -10,80 +11,91 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import font as tkfont
 
-WORK_START_HOUR = 9
-WORK_END_HOUR = 17
-WORK_WEEKDAYS = {0, 1, 2, 3, 4}  # Monday–Friday
-ROTATE_MINUTES = 20
+APP_VERSION = "1.1.1"
+APP_NAME = "Move Reminder"
 
-REMINDERS = (
+DEFAULT_START_HOUR = 9
+DEFAULT_END_HOUR = 17
+DEFAULT_INTERVAL = 20
+WORK_WEEKDAYS = {0, 1, 2, 3, 4}  # Monday–Friday
+START_HOUR_CHOICES = tuple(range(6, 12))
+END_HOUR_CHOICES = tuple(range(13, 21))
+INTERVAL_CHOICES = (20, 30)
+
+MORNING_REMINDERS = (
     "Stand up: 10 air squats",
-    "Desk push-ups or wall push-ups — 8–12",
-    "Stretch: neck, shoulders, back, hips",
-    "Calf raises while you wait",
-    "Drop a Plank for 20–30s",
+    "Chair squats - 10-12 reps",
+    "Get that heart pumping! 20-30 jumping jacks!",
     "March in place for one minute",
     "High Knee March in place with Reach and Pull for 20 reps",
-    "Chair squats - 10-12 reps",
-    "Wall sit for 20-30 seconds",
-    "Tricep dips off chair or floor - 8-10 reps",
-    "On the floor: 12 Glute bridges",
-    "Standing side leg raises - 10 per leg",
-    "Get that heart pumping! 20-30 jumping jacks!",
+    "Get moving - jog in place 45 seconds",
     "Stand up: Butt kicks for 30 seconds",
     "Shadow boxing for 30 seconds",
-    "Get moving - jog in place 45 seconds",
+    "Calf raises while you wait",
+    "Wall sit for 20-30 seconds",
+    "Standing side leg raises - 10 per leg",
+    "Arm circle, big and small, 20 seconds of each",
+    "Shake it out! Full body shake for 15 seconds",
+    "Balance: Single leg stand, eyes closed - 15 seconds per side",
+)
+
+AFTERNOON_REMINDERS = (
+    "Desk push-ups or wall push-ups — 8–12",
+    "Stretch: neck, shoulders, back, hips",
+    "Drop a Plank for 20–30s",
+    "Tricep dips off chair or floor - 8-10 reps",
+    "On the floor: 12 Glute bridges",
     "Stretch: 10 Cat-cows",
     "Stretch: Standing forward fold for 20 seconds",
     "Stretch: Doorway chest stretch for 30 seconds",
     "Stretch: Wrist and forearm stretch",
     "Stretch: 10 Ankle circles in each direction",
     "Stretch: Standing spinal twist - 5 each side",
-    "Balance: Single leg stand, eyes closed - 15 seconds per side ",
     "Balance: Standing knee-to-elbow crunches - 10 per side",
     "Balance: Bird dog - 10 each side",
     "Balance: Side plank - 20 seconds per side",
-    "Shake it out! Full body shake for 15 seconds",
     "Look out the window at something outside, aim for 20+ feet away (eye strain break)",
     "Toe touches for 10 each side",
-    "Arm circle, big and small, 20 seconds of each",
 )
 
-MOTIVATIONS = (
+MORNING_MOTIVATIONS = (
     "A healthy body and mind keeps you grounded",
     "Have you hydrated?",
     "You are doing great!",
-    "Breathe and exhale your stress",
     "Remember you are the author of your life",
     "Small moves add up to a stronger you",
-    "Be kind to yourself in this hour",
     "Show up for you — that’s enough",
+    "How are you feeling? Need to fill your water, get a snack?",
+    "Everything you need to get it done is already inside of you",
+    "Your wildest dream deserve a chance",
+    "There's no such thing as -the right time- Trust yourself and do it!",
+    "Choose you. Ecerytime.",
+    "Your ending is still unwritten. It's never too late to create a life you love.",
+)
+
+AFTERNOON_MOTIVATIONS = (
+    "Breathe and exhale your stress",
+    "Be kind to yourself in this hour",
     "Unclench your jaw. Drop your shoulders.",
     "Progress, not perfection",
     "Straighten up, your back will thank you",
-    "How are you feeling? Need to fill your water, get a snack?",
+    "Sometimes letting go is the best way to free yourself",
+    "Drown out the fucking noise and keep doing you",
+    "The thinghs that you say to yourself matter. Be kind.",
+    "Ask yourself if it will matter in 10 years. If it won't, don't sweat it.",
+    "Don't forget to celebrate the silent battles that you fought and won",
+    "No one else is dwelling on your mistakes. Move the fuck on.",
+    "Tell the negative assholes in our head to sit in a corner for a lifelong timeout",
+    "Your best is more than enough, I promise.",
+    "You are worthy of everything good in this life. Everything.",
     "Be a fucking weirdo. There's power in that",
     "That thing you're self-conscious about is what makes you light up the fucking room",
     "If you don't believe in yourself, how can you expect anyone else to?",
-    "Your wildest dream deserve a chance",
     "Your in control. Your in control. Your in control.",
-    "There's no such thing as -the right time- Trust yourself and do it!",
-    "Everything you need to get it done is already inside of you",
-    "Your best is more than enough, I promise.",
-    "You are worthy of everything good in this life. Everything.",
-    "Sometimes letting go is the best way to free yourself",
     "Don't take anyone's shit. You are to be respected. Always.",
-    "Drown out the fucking noise and keep doing you",
-    "The thinghs that you say to yourself matter. Be kind.",
-    "Choose you. Ecerytime.",
-    "Ask yourself if it will matter in 10 years. If it won't, don't sweat it.",
     "Your opinions aren't tatoos. You can change them any time.",
-    "Your ending is still unwritten. It's never too late to create a life you love.",
-    "Don't forget to celebrate the silent battles that you fought and won",
-    "No one else is dwelling on your mistakes. Move the fuck on.",
-    "Tell the negative assholes in our head to sit in a corner for a lifelong timeout"
 )
 
-# Distinct looks so a new suggestion is obvious at a glance.
 ACTIVE_PALETTES = (
     ((255, 70, 50), (190, 20, 80)),
     ((30, 190, 140), (15, 70, 95)),
@@ -96,11 +108,11 @@ ACTIVE_PALETTES = (
 
 OFF_HOURS = (
     "Off the clock — rest, hydrate, and move when it feels good",
-    "Take some time to enjoy the things you worked hard for!"
+    "Take some time to enjoy the things you worked hard for!",
 )
 WEEKEND = (
     "Weekend — enjoy the rest; a short walk still counts",
-    "If it is a showerless, stay in bed all day type of day, that's okay"
+    "If it is a showerless, stay in bed all day type of day, that's okay",
 )
 
 FONT_CANDIDATES = (
@@ -112,16 +124,59 @@ FONT_CANDIDATES = (
     "Helvetica",
 )
 
-
-def is_work_window(now: datetime) -> bool:
-    if now.weekday() not in WORK_WEEKDAYS:
-        return False
-    return WORK_START_HOUR <= now.hour < WORK_END_HOUR
+CLICK_TAGS = ("completed", "ignore", "lunch", "setup", "done", "start_down", "start_up", "end_down", "end_up", "int20", "int30")
 
 
-def slot_index(now: datetime) -> int:
-    minutes = now.hour * 60 + now.minute
-    return minutes // ROTATE_MINUTES
+def data_dir() -> Path:
+    home = Path.home()
+    path = home / "Library" / "Application Support" / "MoveReminder"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def prefs_path() -> Path:
+    return data_dir() / "prefs.json"
+
+
+def stats_path() -> Path:
+    return data_dir() / "stats.json"
+
+
+def load_prefs() -> dict:
+    try:
+        data = json.loads(prefs_path().read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        data = {}
+    start = int(data.get("start_hour", DEFAULT_START_HOUR))
+    end = int(data.get("end_hour", DEFAULT_END_HOUR))
+    interval = int(data.get("interval_minutes", DEFAULT_INTERVAL))
+    if start not in START_HOUR_CHOICES:
+        start = DEFAULT_START_HOUR
+    if end not in END_HOUR_CHOICES:
+        end = DEFAULT_END_HOUR
+    if start >= end:
+        start, end = DEFAULT_START_HOUR, DEFAULT_END_HOUR
+    if interval not in INTERVAL_CHOICES:
+        interval = DEFAULT_INTERVAL
+    return {"start_hour": start, "end_hour": end, "interval_minutes": interval}
+
+
+def save_prefs(prefs: dict) -> None:
+    prefs_path().write_text(json.dumps(prefs, indent=2) + "\n", encoding="utf-8")
+
+
+def load_stats(day_key: str) -> dict:
+    try:
+        data = json.loads(stats_path().read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        data = {}
+    if data.get("date") != day_key:
+        data = {"date": day_key, "completed": 0, "ignored": 0}
+    return data
+
+
+def save_stats(stats: dict) -> None:
+    stats_path().write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
 
 
 def local_now() -> datetime:
@@ -164,24 +219,50 @@ def tz_label(now: datetime) -> str:
     return "local"
 
 
-def hours_label() -> str:
-    def fmt(hour: int) -> str:
-        suffix = "AM" if hour < 12 else "PM"
-        h12 = hour % 12 or 12
-        return f"{h12}:00 {suffix}"
-
-    return f"{fmt(WORK_START_HOUR)} - {fmt(WORK_END_HOUR)}"
+def hour_label(hour: int) -> str:
+    suffix = "AM" if hour < 12 else "PM"
+    h12 = hour % 12 or 12
+    return f"{h12}:00 {suffix}"
 
 
-def status_for(now: datetime) -> tuple[str, str, str, int]:
-    slot = slot_index(now)
-    motivation = MOTIVATIONS[slot % len(MOTIVATIONS)]
-    if now.weekday() not in WORK_WEEKDAYS:
-        return "weekend", WEEKEND, motivation, slot
-    if is_work_window(now):
-        idx = slot % len(REMINDERS)
-        return "active", REMINDERS[idx], motivation, idx
-    return "off", OFF_HOURS, motivation, slot
+def hours_label(start: int, end: int) -> str:
+    return f"{hour_label(start)} - {hour_label(end)}"
+
+
+def tally_pep(completed: int, ignored: int) -> str:
+    """Encouragement from completed / (completed + ignored). Lunch skips are not in ignored."""
+    total = completed + ignored
+    if total <= 0:
+        return "No prompts logged this shift — tomorrow is a fresh start."
+    pct = 100.0 * completed / total
+    if pct < 50:
+        return "Your tally was low, try to beat it tomorrow!"
+    if pct < 70:
+        return "Good job getting there!"
+    if pct < 80:
+        return "That was a strong day!"
+    if pct < 90:
+        return "Great day — keep stacking those wins!"
+    if pct < 100:
+        return "Excellent work!"
+    return (
+        "Congratulations! You worked hard to keep your health strong today! "
+        "Repeat tomorrow for a stronger body!"
+    )
+
+
+def slot_index(now: datetime, interval: int) -> int:
+    minutes = now.hour * 60 + now.minute
+    return minutes // interval
+
+
+def is_morning_half(now: datetime, start: int, end: int) -> bool:
+    mid = start + (end - start) / 2
+    return (now.hour + now.minute / 60.0) < mid
+
+
+def pick_line(lines: tuple[str, ...], slot: int) -> str:
+    return lines[slot % len(lines)]
 
 
 def inches_to_px(root: tk.Tk, inches: float) -> int:
@@ -199,11 +280,18 @@ def pick_family(root: tk.Tk) -> str:
 
 class MoveReminderApp:
     def __init__(self) -> None:
+        self.prefs = load_prefs()
+        self.stats = load_stats(local_now().date().isoformat())
+        self._on_lunch = False
+        self._view = "main"
+        self._draft_start = self.prefs["start_hour"]
+        self._draft_end = self.prefs["end_hour"]
+        self._draft_interval = self.prefs["interval_minutes"]
+
         self.root = tk.Tk()
-        self.root.title("Move Reminder")
+        self.root.title(f"{APP_NAME} {APP_VERSION}")
         self.family = pick_family(self.root)
 
-        # Borderless float. Aqua Tk needs both topmost and overrideredirect.
         self.root.overrideredirect(True)
         self.root.attributes("-topmost", True)
         try:
@@ -232,11 +320,11 @@ class MoveReminderApp:
 
         self.canvas.bind("<ButtonPress-1>", self._start_drag)
         self.canvas.bind("<B1-Motion>", self._on_drag)
-        self.root.bind("<Escape>", lambda _e: self._request_hide())
-        self.root.bind_all("<Command-w>", lambda _e: self._request_hide())
-        self.root.bind_all("<Command-W>", lambda _e: self._request_hide())
-        self.root.bind_all("<Command-h>", lambda _e: self._request_hide())
-        self.root.bind_all("<Command-H>", lambda _e: self._request_hide())
+        self.root.bind("<Escape>", lambda _e: self._on_ignore())
+        self.root.bind_all("<Command-w>", lambda _e: self._on_ignore())
+        self.root.bind_all("<Command-W>", lambda _e: self._on_ignore())
+        self.root.bind_all("<Command-h>", lambda _e: self._on_ignore())
+        self.root.bind_all("<Command-H>", lambda _e: self._on_ignore())
         try:
             self.root.createcommand("tk::mac::Quit", self._quit)
         except tk.TclError:
@@ -248,14 +336,26 @@ class MoveReminderApp:
     def _quit(self) -> None:
         self.root.after_idle(self.root.destroy)
 
-    def _request_hide(self, _event: tk.Event | None = None) -> None:
-        self.root.after_idle(self._hide)
+    def _day_key(self, now: datetime) -> str:
+        return now.date().isoformat()
 
-    def _hide(self) -> None:
+    def _ensure_stats_day(self, now: datetime) -> None:
+        key = self._day_key(now)
+        if self.stats.get("date") != key:
+            self.stats = {"date": key, "completed": 0, "ignored": 0}
+            save_stats(self.stats)
+
+    def _bump(self, field: str) -> None:
+        now = local_now()
+        self._ensure_stats_day(now)
+        self.stats[field] = int(self.stats.get(field, 0)) + 1
+        save_stats(self.stats)
+
+    def _hide_until_next(self) -> None:
         if self._hidden:
             return
         self._hidden = True
-        self._hide_slot = slot_index(local_now())
+        self._hide_slot = slot_index(local_now(), self.prefs["interval_minutes"])
         self.root.withdraw()
 
     def _show(self) -> None:
@@ -266,8 +366,111 @@ class MoveReminderApp:
         self.root.lift()
         self.root.attributes("-topmost", True)
 
+    def _on_completed(self, _event: tk.Event | None = None) -> str:
+        if self._view != "main":
+            return "break"
+        now = local_now()
+        if self._is_work(now) and not self._on_lunch:
+            self._bump("completed")
+        self.root.after_idle(self._hide_until_next)
+        return "break"
+
+    def _on_ignore(self, _event: tk.Event | None = None) -> str:
+        if self._view != "main":
+            return "break"
+        now = local_now()
+        if self._is_work(now) and not self._on_lunch:
+            self._bump("ignored")
+        self.root.after_idle(self._hide_until_next)
+        return "break"
+
+    def _on_lunch(self, _event: tk.Event | None = None) -> str:
+        self._on_lunch = not self._on_lunch
+        if self._on_lunch:
+            self.root.after_idle(self._hide_until_next)
+        return "break"
+
+    def _open_setup(self, _event: tk.Event | None = None) -> str:
+        self._draft_start = self.prefs["start_hour"]
+        self._draft_end = self.prefs["end_hour"]
+        self._draft_interval = self.prefs["interval_minutes"]
+        self._view = "settings"
+        self._apply_view()
+        return "break"
+
+    def _close_setup(self, _event: tk.Event | None = None) -> str:
+        if self._draft_start < self._draft_end:
+            self.prefs = {
+                "start_hour": self._draft_start,
+                "end_hour": self._draft_end,
+                "interval_minutes": self._draft_interval,
+            }
+            save_prefs(self.prefs)
+        self._view = "main"
+        self._apply_view()
+        return "break"
+
+    def _nudge_start(self, delta: int, _event: tk.Event | None = None) -> str:
+        idx = START_HOUR_CHOICES.index(self._draft_start) if self._draft_start in START_HOUR_CHOICES else 0
+        idx = max(0, min(len(START_HOUR_CHOICES) - 1, idx + delta))
+        self._draft_start = START_HOUR_CHOICES[idx]
+        if self._draft_start >= self._draft_end:
+            for hour in END_HOUR_CHOICES:
+                if hour > self._draft_start:
+                    self._draft_end = hour
+                    break
+        self._refresh_settings_labels()
+        return "break"
+
+    def _nudge_end(self, delta: int, _event: tk.Event | None = None) -> str:
+        idx = END_HOUR_CHOICES.index(self._draft_end) if self._draft_end in END_HOUR_CHOICES else 0
+        idx = max(0, min(len(END_HOUR_CHOICES) - 1, idx + delta))
+        self._draft_end = END_HOUR_CHOICES[idx]
+        if self._draft_end <= self._draft_start:
+            for hour in reversed(START_HOUR_CHOICES):
+                if hour < self._draft_end:
+                    self._draft_start = hour
+                    break
+        self._refresh_settings_labels()
+        return "break"
+
+    def _set_interval(self, minutes: int, _event: tk.Event | None = None) -> str:
+        self._draft_interval = minutes
+        self._refresh_settings_labels()
+        return "break"
+
+    def _is_work(self, now: datetime) -> bool:
+        if now.weekday() not in WORK_WEEKDAYS:
+            return False
+        return self.prefs["start_hour"] <= now.hour < self.prefs["end_hour"]
+
+    def _status(self, now: datetime) -> tuple[str, str, str, int]:
+        slot = slot_index(now, self.prefs["interval_minutes"])
+        morning = is_morning_half(now, self.prefs["start_hour"], self.prefs["end_hour"])
+        motivations = MORNING_MOTIVATIONS if morning else AFTERNOON_MOTIVATIONS
+        motivation = pick_line(motivations, slot)
+        if now.weekday() not in WORK_WEEKDAYS:
+            return "weekend", pick_line(WEEKEND, slot), motivation, slot
+        if self._on_lunch and self._is_work(now):
+            return (
+                "lunch",
+                "On lunch — this slot is not counted as a skip. Tap Lunch when you are back.",
+                "Eat, rest, and come back when you are ready",
+                slot,
+            )
+        if self._is_work(now):
+            reminders = MORNING_REMINDERS if morning else AFTERNOON_REMINDERS
+            period = "Morning wakeup" if morning else "Afternoon reset"
+            return "active", f"{period}: {pick_line(reminders, slot)}", motivation, slot
+        completed = int(self.stats.get("completed", 0))
+        ignored = int(self.stats.get("ignored", 0))
+        tally = f"Shift tally · {completed} completed · {ignored} ignored"
+        pep = tally_pep(completed, ignored)
+        return "off", f"{tally}. {pep}", pep, slot
+
     def _start_drag(self, event: tk.Event) -> None:
-        if "hide" in self.canvas.gettags("current"):
+        tags = set(self.canvas.gettags("current"))
+        if tags & set(CLICK_TAGS):
             return
         self._drag_x = event.x_root - self.root.winfo_x()
         self._drag_y = event.y_root - self.root.winfo_y()
@@ -276,7 +479,7 @@ class MoveReminderApp:
         self.root.update_idletasks()
         sw = self.root.winfo_screenwidth()
         x = max(0, (sw - self.width) // 2)
-        y = 28  # sit below the menu bar
+        y = 28
         self.root.geometry(f"{self.width}x{self.height}+{x}+{y}")
 
     def _on_drag(self, event: tk.Event) -> None:
@@ -305,66 +508,262 @@ class MoveReminderApp:
 
         pad = 14
         inner_w = self.width - pad * 2
+        self.main_items: list[int] = []
+        self.settings_items: list[int] = []
+
         self.title_line = self.canvas.create_text(
             pad,
             pad + 2,
             anchor="nw",
             fill="#fff8e7",
-            font=self._font(12, "bold"),
-            text="Move Reminder  ·  local",
+            font=self._font(11, "bold"),
+            text=f"{APP_NAME} {APP_VERSION}  ·  local",
         )
         self.clock = self.canvas.create_text(
             pad,
-            self.height * 0.26,
+            self.height * 0.24,
             anchor="w",
             fill="#ffffff",
-            font=self._font(28, "bold"),
+            font=self._font(26, "bold"),
             text="--:--:--",
         )
         self.date_line = self.canvas.create_text(
             pad,
-            self.height * 0.46,
+            self.height * 0.42,
             anchor="w",
             fill="#ffe8c8",
-            font=self._font(13),
+            font=self._font(12),
             text="",
         )
         self.hours_line = self.canvas.create_text(
             pad,
-            self.height * 0.56,
+            self.height * 0.52,
             anchor="w",
             fill="#ffe8c8",
-            font=self._font(13),
-            text=hours_label(),
+            font=self._font(12),
+            text="",
+            tags=("setup",),
         )
         self.motivation_line = self.canvas.create_text(
             pad,
-            self.height * 0.70,
+            self.height * 0.64,
             anchor="w",
             fill="#fff4d6",
-            font=self._font(12, "bold"),
+            font=self._font(11, "bold"),
             width=inner_w,
             text="",
         )
         self.prompt = self.canvas.create_text(
             pad,
-            self.height - pad - 6,
+            self.height - 36,
             anchor="sw",
             fill="#ffffff",
-            font=self._font(12, "bold"),
+            font=self._font(11, "bold"),
             width=inner_w,
             text="",
         )
-        self.hide_hit = self.canvas.create_text(
+        btn_y = self.height - 12
+        self.completed_hit = self.canvas.create_text(
+            pad,
+            btn_y,
+            anchor="sw",
+            fill="#fff8e7",
+            font=self._font(11, "bold"),
+            text="Completed",
+            tags=("completed",),
+        )
+        self.ignore_hit = self.canvas.create_text(
+            pad + 92,
+            btn_y,
+            anchor="sw",
+            fill="#fff8e7",
+            font=self._font(11, "bold"),
+            text="Ignore",
+            tags=("ignore",),
+        )
+        self.lunch_hit = self.canvas.create_text(
+            pad + 150,
+            btn_y,
+            anchor="sw",
+            fill="#fff8e7",
+            font=self._font(11, "bold"),
+            text="Lunch",
+            tags=("lunch",),
+        )
+        self.setup_hit = self.canvas.create_text(
             self.width - 14,
             12,
             anchor="ne",
             fill="#fff8e7",
             font=self._font(11),
-            text="Hide",
-            tags=("hide",),
+            text="Setup",
+            tags=("setup",),
         )
-        self.canvas.tag_bind("hide", "<Button-1>", self._request_hide)
+        self.main_items = [
+            self.title_line,
+            self.clock,
+            self.date_line,
+            self.hours_line,
+            self.motivation_line,
+            self.prompt,
+            self.completed_hit,
+            self.ignore_hit,
+            self.lunch_hit,
+            self.setup_hit,
+        ]
+        self.canvas.tag_bind("completed", "<Button-1>", self._on_completed)
+        self.canvas.tag_bind("ignore", "<Button-1>", self._on_ignore)
+        self.canvas.tag_bind("lunch", "<Button-1>", self._on_lunch)
+        self.canvas.tag_bind("setup", "<Button-1>", self._open_setup)
+
+        self.settings_title = self.canvas.create_text(
+            pad,
+            pad + 2,
+            anchor="nw",
+            fill="#fff8e7",
+            font=self._font(12, "bold"),
+            text=f"Shift setup  ·  v{APP_VERSION}",
+            state="hidden",
+        )
+        self.start_label = self.canvas.create_text(
+            pad,
+            self.height * 0.28,
+            anchor="w",
+            fill="#ffffff",
+            font=self._font(13, "bold"),
+            text="",
+            state="hidden",
+        )
+        self.start_down = self.canvas.create_text(
+            self.width - 52,
+            self.height * 0.28,
+            anchor="e",
+            fill="#fff8e7",
+            font=self._font(16, "bold"),
+            text="−",
+            state="hidden",
+            tags=("start_down",),
+        )
+        self.start_up = self.canvas.create_text(
+            self.width - 18,
+            self.height * 0.28,
+            anchor="e",
+            fill="#fff8e7",
+            font=self._font(16, "bold"),
+            text="+",
+            state="hidden",
+            tags=("start_up",),
+        )
+        self.end_label = self.canvas.create_text(
+            pad,
+            self.height * 0.46,
+            anchor="w",
+            fill="#ffffff",
+            font=self._font(13, "bold"),
+            text="",
+            state="hidden",
+        )
+        self.end_down = self.canvas.create_text(
+            self.width - 52,
+            self.height * 0.46,
+            anchor="e",
+            fill="#fff8e7",
+            font=self._font(16, "bold"),
+            text="−",
+            state="hidden",
+            tags=("end_down",),
+        )
+        self.end_up = self.canvas.create_text(
+            self.width - 18,
+            self.height * 0.46,
+            anchor="e",
+            fill="#fff8e7",
+            font=self._font(16, "bold"),
+            text="+",
+            state="hidden",
+            tags=("end_up",),
+        )
+        self.interval_label = self.canvas.create_text(
+            pad,
+            self.height * 0.64,
+            anchor="w",
+            fill="#ffffff",
+            font=self._font(13, "bold"),
+            text="",
+            state="hidden",
+        )
+        self.int20 = self.canvas.create_text(
+            self.width - 70,
+            self.height * 0.64,
+            anchor="e",
+            fill="#fff8e7",
+            font=self._font(12, "bold"),
+            text="20",
+            state="hidden",
+            tags=("int20",),
+        )
+        self.int30 = self.canvas.create_text(
+            self.width - 18,
+            self.height * 0.64,
+            anchor="e",
+            fill="#fff8e7",
+            font=self._font(12, "bold"),
+            text="30",
+            state="hidden",
+            tags=("int30",),
+        )
+        self.done_hit = self.canvas.create_text(
+            self.width - 14,
+            self.height - 12,
+            anchor="se",
+            fill="#fff8e7",
+            font=self._font(12, "bold"),
+            text="Done",
+            state="hidden",
+            tags=("done",),
+        )
+        self.settings_items = [
+            self.settings_title,
+            self.start_label,
+            self.start_down,
+            self.start_up,
+            self.end_label,
+            self.end_down,
+            self.end_up,
+            self.interval_label,
+            self.int20,
+            self.int30,
+            self.done_hit,
+        ]
+        self.canvas.tag_bind("done", "<Button-1>", self._close_setup)
+        self.canvas.tag_bind("start_down", "<Button-1>", lambda e: self._nudge_start(-1, e))
+        self.canvas.tag_bind("start_up", "<Button-1>", lambda e: self._nudge_start(1, e))
+        self.canvas.tag_bind("end_down", "<Button-1>", lambda e: self._nudge_end(-1, e))
+        self.canvas.tag_bind("end_up", "<Button-1>", lambda e: self._nudge_end(1, e))
+        self.canvas.tag_bind("int20", "<Button-1>", lambda e: self._set_interval(20, e))
+        self.canvas.tag_bind("int30", "<Button-1>", lambda e: self._set_interval(30, e))
+
+    def _set_items(self, items: list[int], state: str) -> None:
+        for item in items:
+            self.canvas.itemconfigure(item, state=state)
+
+    def _apply_view(self) -> None:
+        if self._view == "settings":
+            self._set_items(self.main_items, "hidden")
+            self._set_items(self.settings_items, "normal")
+            self._refresh_settings_labels()
+        else:
+            self._set_items(self.settings_items, "hidden")
+            self._set_items(self.main_items, "normal")
+
+    def _refresh_settings_labels(self) -> None:
+        self.canvas.itemconfigure(self.start_label, text=f"Start  {hour_label(self._draft_start)}")
+        self.canvas.itemconfigure(self.end_label, text=f"End    {hour_label(self._draft_end)}")
+        mark20 = "• 20" if self._draft_interval == 20 else "20"
+        mark30 = "• 30" if self._draft_interval == 30 else "30"
+        self.canvas.itemconfigure(self.interval_label, text="Interval (min)")
+        self.canvas.itemconfigure(self.int20, text=mark20)
+        self.canvas.itemconfigure(self.int30, text=mark30)
 
     def _hex(self, r: float, g: float, b: float) -> str:
         def c(v: float) -> int:
@@ -375,6 +774,8 @@ class MoveReminderApp:
     def _palette(self, mode: str, color_idx: int) -> tuple[tuple[float, float, float], tuple[float, float, float]]:
         if mode == "active":
             return ACTIVE_PALETTES[color_idx % len(ACTIVE_PALETTES)]
+        if mode == "lunch":
+            return (40, 120, 90), (20, 50, 60)
         if mode == "weekend":
             return (90, 40, 160), (40, 140, 180)
         return (50, 70, 110), (30, 40, 70)
@@ -391,26 +792,35 @@ class MoveReminderApp:
 
     def _schedule(self) -> None:
         now = local_now()
-        mode, message, motivation, color_idx = status_for(now)
-        slot = slot_index(now)
+        self._ensure_stats_day(now)
+        mode, message, motivation, color_idx = self._status(now)
+        slot = slot_index(now, self.prefs["interval_minutes"])
         if color_idx != self._color_idx:
             self._color_idx = color_idx
         self._paint_gradient(mode, color_idx)
 
-        self.canvas.itemconfigure(
-            self.title_line,
-            text=f"Move Reminder  ·  {tz_label(now)}",
-        )
-        self.canvas.itemconfigure(self.clock, text=now.strftime("%I:%M:%S %p").lstrip("0"))
-        self.canvas.itemconfigure(
-            self.date_line,
-            text=f"{now.strftime('%A')}  ·  {now.strftime('%b %d, %Y')}",
-        )
-        self.canvas.itemconfigure(self.hours_line, text=hours_label())
-        self.canvas.itemconfigure(self.motivation_line, text=motivation)
-        self.canvas.itemconfigure(self.prompt, text=message)
+        if self._view == "main":
+            lunch_mark = "  ·  lunch" if self._on_lunch else ""
+            self.canvas.itemconfigure(
+                self.title_line,
+                text=f"{APP_NAME} {APP_VERSION}  ·  {tz_label(now)}{lunch_mark}",
+            )
+            self.canvas.itemconfigure(self.clock, text=now.strftime("%I:%M:%S %p").lstrip("0"))
+            self.canvas.itemconfigure(
+                self.date_line,
+                text=f"{now.strftime('%A')}  ·  {now.strftime('%b %d, %Y')}",
+            )
+            interval = self.prefs["interval_minutes"]
+            self.canvas.itemconfigure(
+                self.hours_line,
+                text=f"{hours_label(self.prefs['start_hour'], self.prefs['end_hour'])}  ·  every {interval} min",
+            )
+            self.canvas.itemconfigure(self.motivation_line, text=motivation)
+            self.canvas.itemconfigure(self.prompt, text=message)
+            self.canvas.itemconfigure(self.lunch_hit, text="Back" if self._on_lunch else "Lunch")
 
-        if self._hidden and mode == "active" and slot != self._hide_slot:
+        show_modes = {"active", "lunch"}
+        if self._hidden and mode in show_modes and slot != self._hide_slot:
             self._show()
 
         self.root.after(250, self._schedule)
