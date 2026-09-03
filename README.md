@@ -18,22 +18,21 @@ Weekdays during your shift it shows a motivation line and an exercise. **Morning
 Accessibility permission is not required. If the window never stays above other apps, check **System Settings -> Desktop & Dock**, and avoid a full-screen Space that hides floating windows.
 
 ## 3 ways to run
-1. 
+1. Shell command
 
 ```bash
 chmod +x run.command
 ./run.command
 ```
 
-2.
+2. Python
 
 ```bash
 python3 app.py
 ```
 
 
-3.
- Build a Mac app
+3. Build a Mac app
 
 ```bash
 chmod +x build.sh
