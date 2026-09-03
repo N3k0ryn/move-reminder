@@ -463,11 +463,13 @@ class MoveReminderApp:
             reminders = MORNING_REMINDERS if morning else AFTERNOON_REMINDERS
             period = "Morning wakeup" if morning else "Afternoon reset"
             return "active", f"{period}: {pick_line(reminders, slot)}", motivation, slot
-        completed = int(self.stats.get("completed", 0))
-        ignored = int(self.stats.get("ignored", 0))
-        tally = f"Shift tally · {completed} completed · {ignored} ignored"
-        pep = tally_pep(completed, ignored)
-        return "off", f"{tally}. {pep}", pep, slot
+        if now.hour >= self.prefs["end_hour"]:
+            completed = int(self.stats.get("completed", 0))
+            ignored = int(self.stats.get("ignored", 0))
+            tally = f"Shift tally · {completed} completed · {ignored} ignored"
+            pep = tally_pep(completed, ignored)
+            return "off", f"{tally}. {pep}", pep, slot
+        return "off", pick_line(OFF_HOURS, slot), motivation, slot
 
     def _start_drag(self, event: tk.Event) -> None:
         tags = set(self.canvas.gettags("current"))
@@ -518,7 +520,7 @@ class MoveReminderApp:
             anchor="nw",
             fill="#fff8e7",
             font=self._font(11, "bold"),
-            text=f"{APP_NAME} {APP_VERSION}  ·  local",
+            text=f"{APP_NAME}  ·  local",
         )
         self.clock = self.canvas.create_text(
             pad,
@@ -600,17 +602,8 @@ class MoveReminderApp:
             text="Setup",
             tags=("setup",),
         )
-        self.credit_line = self.canvas.create_text(
-            pad,
-            pad + 18,
-            anchor="nw",
-            fill="#ffe8c8",
-            font=self._font(9),
-            text=MADE_WITH,
-        )
         self.main_items = [
             self.title_line,
-            self.credit_line,
             self.clock,
             self.date_line,
             self.hours_line,
@@ -823,17 +816,16 @@ class MoveReminderApp:
             lunch_mark = "  ·  lunch" if self._on_lunch else ""
             self.canvas.itemconfigure(
                 self.title_line,
-                text=f"{APP_NAME} {APP_VERSION}  ·  {tz_label(now)}{lunch_mark}",
+                text=f"{APP_NAME}  ·  {tz_label(now)}{lunch_mark}",
             )
             self.canvas.itemconfigure(self.clock, text=now.strftime("%I:%M:%S %p").lstrip("0"))
             self.canvas.itemconfigure(
                 self.date_line,
                 text=f"{now.strftime('%A')}  ·  {now.strftime('%b %d, %Y')}",
             )
-            interval = self.prefs["interval_minutes"]
             self.canvas.itemconfigure(
                 self.hours_line,
-                text=f"{hours_label(self.prefs['start_hour'], self.prefs['end_hour'])}  ·  every {interval} min",
+                text=hours_label(self.prefs['start_hour'], self.prefs['end_hour']),
             )
             self.canvas.itemconfigure(self.motivation_line, text=motivation)
             self.canvas.itemconfigure(self.prompt, text=message)
