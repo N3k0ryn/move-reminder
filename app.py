@@ -69,7 +69,7 @@ MORNING_MOTIVATIONS = (
     "Everything you need to get it done is already inside of you",
     "Your wildest dream deserve a chance",
     "There's no such thing as -the right time- Trust yourself and do it!",
-    "Choose you. Ecerytime.",
+    "Choose you. Everytime.",
     "Your ending is still unwritten. It's never too late to create a life you love.",
 )
 
@@ -81,7 +81,7 @@ AFTERNOON_MOTIVATIONS = (
     "Straighten up, your back will thank you",
     "Sometimes letting go is the best way to free yourself",
     "Drown out the fucking noise and keep doing you",
-    "The thinghs that you say to yourself matter. Be kind.",
+    "The things that you say to yourself matter. Be kind.",
     "Ask yourself if it will matter in 10 years. If it won't, don't sweat it.",
     "Don't forget to celebrate the silent battles that you fought and won",
     "No one else is dwelling on your mistakes. Move the fuck on.",
@@ -91,7 +91,7 @@ AFTERNOON_MOTIVATIONS = (
     "Be a fucking weirdo. There's power in that",
     "That thing you're self-conscious about is what makes you light up the fucking room",
     "If you don't believe in yourself, how can you expect anyone else to?",
-    "Your in control. Your in control. Your in control.",
+    "You are in control. You are in control. You are in control.",
     "Don't take anyone's shit. You are to be respected. Always.",
     "Your opinions aren't tatoos. You can change them any time.",
 )
