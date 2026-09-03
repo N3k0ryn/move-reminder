@@ -50,8 +50,8 @@ app = BUNDLE(
     info_plist={
         "CFBundleName": "Move Reminder",
         "CFBundleDisplayName": "Move Reminder",
-        "CFBundleShortVersionString": "1.0.0",
-        "CFBundleVersion": "1.0.0",
+        "CFBundleShortVersionString": "1.1.1",
+        "CFBundleVersion": "1.1.1",
         "NSHighResolutionCapable": True,
         "LSUIElement": True,
         "LSMinimumSystemVersion": "10.15",

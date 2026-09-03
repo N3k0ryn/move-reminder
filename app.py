@@ -11,6 +11,9 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import font as tkfont
 
+APP_VERSION = "1.1.1"
+APP_NAME = "Move Reminder"
+
 DEFAULT_START_HOUR = 9
 DEFAULT_END_HOUR = 17
 DEFAULT_INTERVAL = 20
@@ -226,6 +229,28 @@ def hours_label(start: int, end: int) -> str:
     return f"{hour_label(start)} - {hour_label(end)}"
 
 
+def tally_pep(completed: int, ignored: int) -> str:
+    """Encouragement from completed / (completed + ignored). Lunch skips are not in ignored."""
+    total = completed + ignored
+    if total <= 0:
+        return "No prompts logged this shift — tomorrow is a fresh start."
+    pct = 100.0 * completed / total
+    if pct < 50:
+        return "Your tally was low, try to beat it tomorrow!"
+    if pct < 70:
+        return "Good job getting there!"
+    if pct < 80:
+        return "That was a strong day!"
+    if pct < 90:
+        return "Great day — keep stacking those wins!"
+    if pct < 100:
+        return "Excellent work!"
+    return (
+        "Congratulations! You worked hard to keep your health strong today! "
+        "Repeat tomorrow for a stronger body!"
+    )
+
+
 def slot_index(now: datetime, interval: int) -> int:
     minutes = now.hour * 60 + now.minute
     return minutes // interval
@@ -264,7 +289,7 @@ class MoveReminderApp:
         self._draft_interval = self.prefs["interval_minutes"]
 
         self.root = tk.Tk()
-        self.root.title("Move Reminder")
+        self.root.title(f"{APP_NAME} {APP_VERSION}")
         self.family = pick_family(self.root)
 
         self.root.overrideredirect(True)
@@ -437,11 +462,11 @@ class MoveReminderApp:
             reminders = MORNING_REMINDERS if morning else AFTERNOON_REMINDERS
             period = "Morning wakeup" if morning else "Afternoon reset"
             return "active", f"{period}: {pick_line(reminders, slot)}", motivation, slot
-        tally = (
-            f"Shift tally · {self.stats.get('completed', 0)} completed · "
-            f"{self.stats.get('ignored', 0)} ignored"
-        )
-        return "off", pick_line(OFF_HOURS, slot), tally, slot
+        completed = int(self.stats.get("completed", 0))
+        ignored = int(self.stats.get("ignored", 0))
+        tally = f"Shift tally · {completed} completed · {ignored} ignored"
+        pep = tally_pep(completed, ignored)
+        return "off", f"{tally}. {pep}", pep, slot
 
     def _start_drag(self, event: tk.Event) -> None:
         tags = set(self.canvas.gettags("current"))
@@ -492,7 +517,7 @@ class MoveReminderApp:
             anchor="nw",
             fill="#fff8e7",
             font=self._font(11, "bold"),
-            text="Move Reminder  ·  local",
+            text=f"{APP_NAME} {APP_VERSION}  ·  local",
         )
         self.clock = self.canvas.create_text(
             pad,
@@ -597,7 +622,7 @@ class MoveReminderApp:
             anchor="nw",
             fill="#fff8e7",
             font=self._font(12, "bold"),
-            text="Shift setup",
+            text=f"Shift setup  ·  v{APP_VERSION}",
             state="hidden",
         )
         self.start_label = self.canvas.create_text(
@@ -778,7 +803,7 @@ class MoveReminderApp:
             lunch_mark = "  ·  lunch" if self._on_lunch else ""
             self.canvas.itemconfigure(
                 self.title_line,
-                text=f"Move Reminder  ·  {tz_label(now)}{lunch_mark}",
+                text=f"{APP_NAME} {APP_VERSION}  ·  {tz_label(now)}{lunch_mark}",
             )
             self.canvas.itemconfigure(self.clock, text=now.strftime("%I:%M:%S %p").lstrip("0"))
             self.canvas.itemconfigure(

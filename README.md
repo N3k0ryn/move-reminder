@@ -1,5 +1,7 @@
 # Move Reminder (macOS)
 
+Version **1.1.1**. See [CHANGELOG.md](CHANGELOG.md) for what changed since the original.
+
 A floating, always-on-top window about **3 inches tall** and **4 inches wide**. It uses the Mac's **local time zone**.
 
 Weekdays during your shift it shows a motivation line and an exercise. **Morning** slots use wakeup moves (heart rate, standing, marching). **Afternoon** slots use desk resets (stretch, posture, eyes). The split is the midpoint of your shift.
@@ -15,30 +17,23 @@ Weekdays during your shift it shows a motivation line and an exercise. **Morning
 
 Accessibility permission is not required. If the window never stays above other apps, check **System Settings -> Desktop & Dock**, and avoid a full-screen Space that hides floating windows.
 
-## Run
+## 3 ways to run
+1. 
 
 ```bash
 chmod +x run.command
 ./run.command
 ```
 
-Or:
+2.
 
 ```bash
 python3 app.py
 ```
 
-- Drag to move.
-- **Completed** marks the prompt done and hides until the next interval.
-- **Ignore** skips it (counts as ignored) and hides until the next interval.
-- **Lunch** / **Back** toggles lunch. While you are on lunch, skips are not counted against you.
-- **Setup** (or the hours line): change start/end (default 9:00 AM-5:00 PM) and interval (20 or 30 minutes).
-- After the shift, the widget shows that day's completed vs ignored tally.
-- **Esc**, Cmd-H, or Cmd-W acts like Ignore. **Cmd-Q** quits.
 
-Hours, interval, and the daily tally are saved under `~/Library/Application Support/MoveReminder/`.
-
-## Build a Mac app
+3.
+ Build a Mac app
 
 ```bash
 chmod +x build.sh
@@ -50,6 +45,18 @@ Output: `dist/Move Reminder.app`
 Drag it to Applications. First launch: right-click the app -> **Open** (Gatekeeper). It is set as a menu-bar-style agent (`LSUIElement`), so it may not show a Dock icon.
 
 To start at login: System Settings -> General -> Login Items -> add **Move Reminder**.
+
+# Usage:
+- Drag to move on screen.
+- **Completed** marks the prompt done and hides until the next interval.
+- **Ignore** skips it (counts as ignored) and hides until the next interval.
+- **Lunch** / **Back** toggles lunch. While you are on lunch, skips are not counted against you.
+- **Setup** (or the hours line): change start/end (default 9:00 AM-5:00 PM) and interval (default 20 minutes).
+- After the shift, the widget shows that day's completed vs ignored tally and a pep talk from the completion rate (completed / completed + ignored). Lunch skips do not count.
+- **Esc**, Cmd-H, or Cmd-W acts like Ignore. **Cmd-Q** quits.
+
+Hours, interval, and the daily tally are saved under `~/Library/Application Support/MoveReminder/`.
+
 
 ## License
 
