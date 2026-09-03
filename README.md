@@ -2,7 +2,7 @@
 
 Version **1.1.1**. See [CHANGELOG.md](CHANGELOG.md) for what changed since the original.
 
-A floating, always-on-top window about **3 inches tall** and **4 inches wide**. It uses the Mac's **local time zone**.
+A floating, on-top window about **3 inches tall** and **4 inches wide**. It uses the Mac's **local time zone**.
 
 Weekdays during your shift it shows a motivation line and an exercise. **Morning** slots use wakeup moves (heart rate, standing, marching). **Afternoon** slots use desk resets (stretch, posture, eyes). The split is the midpoint of your shift. It will tally up your completed exercises / ignored states and give you an end of the day note about it. 
 
