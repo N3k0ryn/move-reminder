@@ -13,6 +13,7 @@ from tkinter import font as tkfont
 
 APP_VERSION = "1.1.1"
 APP_NAME = "Move Reminder"
+MADE_WITH = "Made with Cursor ♥"
 
 DEFAULT_START_HOUR = 9
 DEFAULT_END_HOUR = 17
