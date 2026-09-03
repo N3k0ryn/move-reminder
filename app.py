@@ -284,6 +284,7 @@ class MoveReminderApp:
         self.prefs = load_prefs()
         self.stats = load_stats(local_now().date().isoformat())
         self._on_lunch = False
+        self._greeted = False
         self._view = "main"
         self._draft_start = self.prefs["start_hour"]
         self._draft_end = self.prefs["end_hour"]
@@ -344,6 +345,7 @@ class MoveReminderApp:
         key = self._day_key(now)
         if self.stats.get("date") != key:
             self.stats = {"date": key, "completed": 0, "ignored": 0}
+            self._greeted = False
             save_stats(self.stats)
 
     def _bump(self, field: str) -> None:
@@ -460,6 +462,12 @@ class MoveReminderApp:
                 slot,
             )
         if self._is_work(now):
+            if not self._greeted:
+                self._greeted = True
+                greeting = "Good morning!" if morning else "Good afternoon!"
+                reminders = MORNING_REMINDERS if morning else AFTERNOON_REMINDERS
+                period = "Morning wakeup" if morning else "Afternoon reset"
+                return "active", f"{period}: {pick_line(reminders, slot)}", greeting, slot
             reminders = MORNING_REMINDERS if morning else AFTERNOON_REMINDERS
             period = "Morning wakeup" if morning else "Afternoon reset"
             return "active", f"{period}: {pick_line(reminders, slot)}", motivation, slot
