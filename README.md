@@ -1,13 +1,15 @@
 # Move Reminder (macOS)
 
-A floating, always-on-top window about **3 inches tall** and **4 inches wide**. It uses the Mac's **local time zone**, shows a motivation line, and rotates the exercise prompt and colors every 20 minutes, Monday-Friday 9:00 AM-5:00 PM local.
+A floating, always-on-top window about **3 inches tall** and **4 inches wide**. It uses the Mac's **local time zone**.
+
+Weekdays during your shift it shows a motivation line and an exercise. **Morning** slots use wakeup moves (heart rate, standing, marching). **Afternoon** slots use desk resets (stretch, posture, eyes). The split is the midpoint of your shift.
 
 ## What you need
 
 1. **Python 3.9 or newer** (3.11+ is fine).
 2. **Tkinter** (the GUI toolkit). It is *not* a pip package.
    - **Best:** install Python from [python.org](https://www.python.org/downloads/macos/). That build includes Tk.
-   - **Homebrew:** `brew install python` is not enough by itself ? also `brew install python-tk`.
+   - **Homebrew:** `brew install python` is not enough by itself — also `brew install python-tk`.
    - Check: `python3 -c "import tkinter; print(tkinter.TkVersion)"`
 3. No extra pip modules to run from source.
 
@@ -26,7 +28,15 @@ Or:
 python3 app.py
 ```
 
-Drag to move. Click **Hide** or press **Esc** (or Cmd-H / Cmd-W) to tuck the window away; it comes back at the next 20-minute workout slot (weekdays 9-5). **Cmd-Q** quits.
+- Drag to move.
+- **Completed** marks the prompt done and hides until the next interval.
+- **Ignore** skips it (counts as ignored) and hides until the next interval.
+- **Lunch** / **Back** toggles lunch. While you are on lunch, skips are not counted against you.
+- **Setup** (or the hours line): change start/end (default 9:00 AM-5:00 PM) and interval (20 or 30 minutes).
+- After the shift, the widget shows that day's completed vs ignored tally.
+- **Esc**, Cmd-H, or Cmd-W acts like Ignore. **Cmd-Q** quits.
+
+Hours, interval, and the daily tally are saved under `~/Library/Application Support/MoveReminder/`.
 
 ## Build a Mac app
 
