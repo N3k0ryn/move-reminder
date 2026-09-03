@@ -30,14 +30,14 @@ MORNING_REMINDERS = (
     "March in place for one minute",
     "High Knee March in place with Reach and Pull for 20 reps",
     "Get moving - jog in place 45 seconds",
-    "Stand up: Butt kicks for 30 seconds",
+    "Stand up butt kicks for 30 seconds",
     "Shadow boxing for 30 seconds",
     "Calf raises while you wait",
     "Wall sit for 20-30 seconds",
     "Standing side leg raises - 10 per leg",
     "Arm circle, big and small, 20 seconds of each",
     "Shake it out! Full body shake for 15 seconds",
-    "Balance: Single leg stand, eyes closed - 15 seconds per side",
+    "Balance - Single leg stand, eyes closed - 15 seconds per side",
 )
 
 AFTERNOON_REMINDERS = (
@@ -46,15 +46,15 @@ AFTERNOON_REMINDERS = (
     "Drop a Plank for 20–30s",
     "Tricep dips off chair or floor - 8-10 reps",
     "On the floor: 12 Glute bridges",
-    "Stretch: 10 Cat-cows",
-    "Stretch: Standing forward fold for 20 seconds",
-    "Stretch: Doorway chest stretch for 30 seconds",
-    "Stretch: Wrist and forearm stretch",
-    "Stretch: 10 Ankle circles in each direction",
-    "Stretch: Standing spinal twist - 5 each side",
-    "Balance: Standing knee-to-elbow crunches - 10 per side",
-    "Balance: Bird dog - 10 each side",
-    "Balance: Side plank - 20 seconds per side",
+    "Stretch, 10 Cat-cows",
+    "Stretch, standing forward fold for 20 seconds",
+    "Stretch, doorway chest stretch for 30 seconds",
+    "Stretch, wrist and forearm stretch",
+    "Stretch, 10 Ankle circles in each direction",
+    "Stretch, standing spinal twist - 5 each side",
+    "Balance, standing knee-to-elbow crunches - 10 per side",
+    "Balance, bird dog - 10 each side",
+    "Balance, side plank - 20 seconds per side",
     "Look out the window at something outside, aim for 20+ feet away (eye strain break)",
     "Toe touches for 10 each side",
 )
@@ -94,7 +94,7 @@ AFTERNOON_MOTIVATIONS = (
     "If you don't believe in yourself, how can you expect anyone else to?",
     "You are in control. You are in control. You are in control.",
     "Don't take anyone's shit. You are to be respected. Always.",
-    "Your opinions aren't tatoos. You can change them any time.",
+    "Your opinions aren't tattoos. You can change them any time.",
 )
 
 ACTIVE_PALETTES = (
@@ -388,9 +388,16 @@ class MoveReminderApp:
         return "break"
 
     def _on_lunch(self, _event: tk.Event | None = None) -> str:
-        self._on_lunch = not self._on_lunch
+        if self._view != "main":
+            return "break"
         if self._on_lunch:
-            self.root.after_idle(self._hide_until_next)
+            self._on_lunch = False
+            if self._hidden:
+                self._show()
+        else:
+            self._on_lunch = True
+            if self._hidden:
+                self._show()
         return "break"
 
     def _open_setup(self, _event: tk.Event | None = None) -> str:
@@ -454,11 +461,11 @@ class MoveReminderApp:
         motivation = pick_line(motivations, slot)
         if now.weekday() not in WORK_WEEKDAYS:
             return "weekend", pick_line(WEEKEND, slot), motivation, slot
-        if self._on_lunch and self._is_work(now):
+        if self._on_lunch:
             return (
                 "lunch",
-                "On lunch — this slot is not counted as a skip. Tap Lunch when you are back.",
-                "Eat, rest, and come back when you are ready",
+                "Away on lunch — prompts are paused and will not count against you.",
+                "Tap Back when you return",
                 slot,
             )
         if self._is_work(now):
@@ -838,9 +845,14 @@ class MoveReminderApp:
             self.canvas.itemconfigure(self.motivation_line, text=motivation)
             self.canvas.itemconfigure(self.prompt, text=message)
             self.canvas.itemconfigure(self.lunch_hit, text="Back" if self._on_lunch else "Lunch")
+            action_state = "hidden" if self._on_lunch else "normal"
+            self.canvas.itemconfigure(self.completed_hit, state=action_state)
+            self.canvas.itemconfigure(self.ignore_hit, state=action_state)
 
-        show_modes = {"active", "lunch"}
-        if self._hidden and mode in show_modes and slot != self._hide_slot:
+        # While on lunch, stay put and do not auto-pop at the next interval.
+        if self._on_lunch:
+            pass
+        elif self._hidden and mode == "active" and slot != self._hide_slot:
             self._show()
 
         self.root.after(250, self._schedule)

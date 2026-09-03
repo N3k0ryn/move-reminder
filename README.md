@@ -49,15 +49,18 @@ To start at login: System Settings -> General -> Login Items -> add **Move Remin
 - Drag to move on screen.
 - **Completed** marks the prompt done and hides until the next interval.
 - **Ignore** skips it (counts as ignored) and hides until the next interval.
-- **Lunch** / **Back** toggles lunch. While you are on lunch, skips are not counted against you.
+- **Lunch** / **Back**: Lunch pauses prompts, keeps the widget visible with an away message, and does not count against you. Tap **Back** to resume.
 - **Setup** (or the hours line): change start/end (default 9:00 AM-5:00 PM) and interval (default 20 minutes).
 - After the shift, the widget shows that day's completed vs ignored tally and a pep talk from the completion rate (completed / completed + ignored). Lunch skips do not count.
 - **Esc**, Cmd-H, or Cmd-W acts like Ignore. **Cmd-Q** quits.
 
 Hours, interval, and the daily tally are saved under `~/Library/Application Support/MoveReminder/`.
 
-Made with [Cursor](https://cursor.com) ♥.
+## Credits
 
+Built with [Skartron](https://github.com/Skartron).
+
+Made with [Cursor](https://cursor.com) ♥.
 
 ## License
 
