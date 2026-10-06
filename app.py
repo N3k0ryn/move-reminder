@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import font as tkfont
 
-APP_VERSION = "1.1.1"
+APP_VERSION = "1.2.0"
 APP_NAME = "Move Reminder"
 MADE_WITH = "Made with Cursor ♥"
 

@@ -4,6 +4,12 @@ All notable changes to Move Reminder (macOS) since the original release.
 
 The version shown in the widget, Setup, and the built `.app` is `APP_VERSION` in `app.py`.
 
+## 1.2.0 — 2026-10-05
+
+- Added more workouts and stretches to both morning and afternoon prompt sets.
+- Rotation is now shuffled each day so exercises feel less predictable.
+- Updated README credits.
+
 ## 1.1.1 — 2026-09-02
 
 - After the shift, a pep message based on the day's completion rate (under 50%, 50–70%, 70–80%, 80–90%, 90–100%, or 100%).
