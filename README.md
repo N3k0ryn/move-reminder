@@ -58,9 +58,7 @@ Hours, interval, and the daily tally are saved under `~/Library/Application Supp
 
 ## Credits
 
-Built with [Skartron](https://github.com/Skartron). Exercises and motivation messages. 
-
-Made with [Cursor](https://cursor.com) ♥.
+Created by N3k0ryn, motivations and exercise tips with [Skartron](https://github.com/Skartron).
 
 ## License
 

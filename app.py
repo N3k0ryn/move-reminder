@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import random
 import sys
 import time
 import tkinter as tk
@@ -38,6 +39,18 @@ MORNING_REMINDERS = (
     "Arm circle, big and small, 20 seconds of each",
     "Shake it out! Full body shake for 15 seconds",
     "Balance - Single leg stand, eyes closed - 15 seconds per side",
+    "Reverse lunges - 10 per leg",
+    "Standing hip circles - 10 each direction",
+    "Wall push-ups - 10-15 reps",
+    "Seated knee lifts - 30 seconds",
+    "Desk plank hold - 20 seconds",
+    "Standing torso rotations - 20 reps",
+    "March with high knees for 30 seconds",
+    "Quick stair climbs or step-ups - 1 minute",
+    "Stand and reach for the ceiling, then side stretch - 5 each side",
+    "Bodyweight squats to a chair and back up - 12 reps",
+    "Arm pumps overhead for 30 seconds",
+    "Nerd neck reset: chin tucks, 10 reps",
 )
 
 AFTERNOON_REMINDERS = (
@@ -57,6 +70,19 @@ AFTERNOON_REMINDERS = (
     "Balance, side plank - 20 seconds per side",
     "Look out the window at something outside, aim for 20+ feet away (eye strain break)",
     "Toe touches for 10 each side",
+    "Hip flexor stretch - 30 seconds per side",
+    "Seated spinal twist - hold 20 seconds each side",
+    "Spelunker stretch: reach one arm across your chest - 20s per side",
+    "Shoulder rolls - 10 forward, 10 back",
+    "Wrist circles and finger stretches - 30 seconds",
+    "Neck stretches: ear to shoulder, 15 seconds each side",
+    "Doorway pec stretch - 30 seconds per side",
+    "Standing quad stretch - 20 seconds per leg",
+    "Cross-body arm stretch - 20 seconds per arm",
+    "Cat-camel stretch on the floor - 10 slow reps",
+    "Hamstring stretch seated on a chair edge - 30 seconds",
+    "Ankle alphabet: trace letters with each foot",
+    "Deep squat hold (assisted if needed) - 20 seconds",
 )
 
 MORNING_MOTIVATIONS = (
@@ -267,7 +293,12 @@ def is_morning_half(now: datetime, start: int, end: int) -> bool:
 
 
 def pick_line(lines: tuple[str, ...], slot: int) -> str:
-    return lines[slot % len(lines)]
+    # Walk a shuffled order of the list (reshuffled each day) so rotation
+    # stays unpredictable and every exercise shows up before repeats.
+    order = list(lines)
+    today = datetime.now().date()
+    random.Random(today.toordinal() + len(lines)).shuffle(order)
+    return order[slot % len(order)]
 
 
 def inches_to_px(root: tk.Tk, inches: float) -> int:
