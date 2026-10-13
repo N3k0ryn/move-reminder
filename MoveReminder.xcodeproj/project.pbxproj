@@ -1,0 +1,262 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DEAD0000000000000000001 /* MoveReminderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE0000000000000000001 /* MoveReminderApp.swift */; };
+		DEAD0000000000000000002 /* FloatingPanel.swift in Sources */   = {isa = PBXBuildFile; fileRef = FACE0000000000000000002 /* FloatingPanel.swift */; };
+		DEAD0000000000000000003 /* AppViewModel.swift in Sources */    = {isa = PBXBuildFile; fileRef = FACE0000000000000000003 /* AppViewModel.swift */; };
+		DEAD0000000000000000004 /* Content.swift in Sources */         = {isa = PBXBuildFile; fileRef = FACE0000000000000000004 /* Content.swift */; };
+		DEAD0000000000000000005 /* Models.swift in Sources */          = {isa = PBXBuildFile; fileRef = FACE0000000000000000005 /* Models.swift */; };
+		DEAD0000000000000000006 /* MainView.swift in Sources */        = {isa = PBXBuildFile; fileRef = FACE0000000000000000006 /* MainView.swift */; };
+		DEAD0000000000000000007 /* SettingsView.swift in Sources */    = {isa = PBXBuildFile; fileRef = FACE0000000000000000007 /* SettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		FACE0000000000000000001 /* MoveReminderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveReminderApp.swift; sourceTree = "<group>"; };
+		FACE0000000000000000002 /* FloatingPanel.swift */   = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanel.swift;   sourceTree = "<group>"; };
+		FACE0000000000000000003 /* AppViewModel.swift */    = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift;    sourceTree = "<group>"; };
+		FACE0000000000000000004 /* Content.swift */         = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift;         sourceTree = "<group>"; };
+		FACE0000000000000000005 /* Models.swift */          = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift;          sourceTree = "<group>"; };
+		FACE0000000000000000006 /* MainView.swift */        = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift;        sourceTree = "<group>"; };
+		FACE0000000000000000007 /* SettingsView.swift */    = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift;    sourceTree = "<group>"; };
+		FACE0000000000000000008 /* Info.plist */            = {isa = PBXFileReference; lastKnownFileType = text.plist.xml;   path = Info.plist;            sourceTree = "<group>"; };
+		FACE0000000000000000009 /* Move Reminder.app */     = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Move Reminder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CAFE0000000000000000008 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CAFE0000000000000000004 = {
+			isa = PBXGroup;
+			children = (
+				CAFE0000000000000000005 /* MoveReminder */,
+				CAFE0000000000000000006 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CAFE0000000000000000005 /* MoveReminder */ = {
+			isa = PBXGroup;
+			children = (
+				FACE0000000000000000001 /* MoveReminderApp.swift */,
+				FACE0000000000000000002 /* FloatingPanel.swift */,
+				FACE0000000000000000003 /* AppViewModel.swift */,
+				FACE0000000000000000004 /* Content.swift */,
+				FACE0000000000000000005 /* Models.swift */,
+				FACE0000000000000000006 /* MainView.swift */,
+				FACE0000000000000000007 /* SettingsView.swift */,
+				FACE0000000000000000008 /* Info.plist */,
+			);
+			path = MoveReminder;
+			sourceTree = "<group>";
+		};
+		CAFE0000000000000000006 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FACE0000000000000000009 /* Move Reminder.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CAFE0000000000000000002 /* MoveReminder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CAFE000000000000000000F /* Build configuration list for PBXNativeTarget "MoveReminder" */;
+			buildPhases = (
+				CAFE0000000000000000007 /* Sources */,
+				CAFE0000000000000000008 /* Frameworks */,
+				CAFE0000000000000000009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoveReminder;
+			productName = "Move Reminder";
+			productReference = FACE0000000000000000009 /* Move Reminder.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CAFE0000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					CAFE0000000000000000002 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = CAFE000000000000000000E /* Build configuration list for PBXProject "MoveReminder" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CAFE0000000000000000004;
+			productRefGroup = CAFE0000000000000000006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CAFE0000000000000000002 /* MoveReminder */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CAFE0000000000000000009 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CAFE0000000000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEAD0000000000000000001 /* MoveReminderApp.swift in Sources */,
+				DEAD0000000000000000002 /* FloatingPanel.swift in Sources */,
+				DEAD0000000000000000003 /* AppViewModel.swift in Sources */,
+				DEAD0000000000000000004 /* Content.swift in Sources */,
+				DEAD0000000000000000005 /* Models.swift in Sources */,
+				DEAD0000000000000000006 /* MainView.swift in Sources */,
+				DEAD0000000000000000007 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CAFE000000000000000000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CAFE000000000000000000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CAFE000000000000000000C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MoveReminder/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.movereminder.app";
+				PRODUCT_NAME = "Move Reminder";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		CAFE000000000000000000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = MoveReminder/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.movereminder.app";
+				PRODUCT_NAME = "Move Reminder";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CAFE000000000000000000E /* Build configuration list for PBXProject "MoveReminder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CAFE000000000000000000A /* Debug */,
+				CAFE000000000000000000B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CAFE000000000000000000F /* Build configuration list for PBXNativeTarget "MoveReminder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CAFE000000000000000000C /* Debug */,
+				CAFE000000000000000000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CAFE0000000000000000001 /* Project object */;
+}

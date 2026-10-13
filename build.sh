@@ -1,17 +1,22 @@
 #!/bin/bash
+# Build Move Reminder (Swift) for macOS — requires Xcode 15+ command-line tools.
 set -euo pipefail
 cd "$(dirname "$0")"
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "python3 is required to build." >&2
+
+if ! command -v xcodebuild &>/dev/null; then
+  echo "xcodebuild not found. Install Xcode from the App Store, then run:" >&2
+  echo "  xcode-select --install" >&2
   exit 1
 fi
-if ! python3 -c "import tkinter" 2>/dev/null; then
-  echo "Tkinter is missing; the app bundle needs it." >&2
-  echo "Install Python from python.org, or: brew install python-tk" >&2
-  exit 1
-fi
-python3 -m pip install -r requirements-build.txt
-python3 -m PyInstaller --noconfirm --clean MoveReminder.spec
+
+xcodebuild \
+  -project MoveReminder.xcodeproj \
+  -scheme  MoveReminder \
+  -configuration Release \
+  -derivedDataPath build \
+  build
+
+APP="build/Build/Products/Release/Move Reminder.app"
 echo
-echo "Built: $(pwd)/dist/Move Reminder.app"
-echo "Drag that .app to Applications, then open it (first time: right-click -> Open)."
+echo "Built: $(pwd)/$APP"
+echo "Drag that .app to /Applications, then right-click → Open on first launch."

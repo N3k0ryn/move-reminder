@@ -1,65 +1,90 @@
-# Move Reminder (macOS)
+# Move Reminder
 
-Version **1.1.1**. See [CHANGELOG.md](CHANGELOG.md) for what changed since the original.
+An always-on-top 4 × 3 inch floating panel for macOS that prompts you to move
+every 20 or 30 minutes during your workday.  No menu-bar icon, no Dock icon —
+just a quiet, draggable strip that stays out of the way until it's time to move.
 
-A floating, on-top window about **3 inches tall** and **4 inches wide**. It uses the Mac's **local time zone**.
+Built with **Swift + SwiftUI + AppKit**.  Requires macOS 13 Ventura or later.
 
-Weekdays during your shift it shows a motivation line and an exercise. **Morning** slots use wakeup moves (heart rate, standing, marching). **Afternoon** slots use desk resets (stretch, posture, eyes). The split is the midpoint of your shift. It will tally up your completed exercises / ignored states and give you an end of the day note about it. 
+---
 
-## What you need
+## Features
 
-1. **Python 3.9 or newer** (3.11+ is fine).
-2. **Tkinter** (the GUI toolkit). It is *not* a pip package.
-   - **Best:** install Python from [python.org](https://www.python.org/downloads/macos/). That build includes Tk.
-   - **Homebrew:** `brew install python` is not enough by itself — also `brew install python-tk`.
-   - Check: `python3 -c "import tkinter; print(tkinter.TkVersion)"`
-3. No extra pip modules to run from source.
+- Live clock with timezone label
+- Morning and afternoon exercise prompt rotations (shuffled per day)
+- Morning and afternoon motivational quotes (shuffled per day)
+- Gradient background that changes colour with each interval
+- Completed / Ignore / Lunch tracking — daily stats saved to disk
+- Configurable shift start/end (6 AM – 11 AM start, 1 PM – 8 PM end)
+- 20 or 30 minute reminder interval
+- Auto-hides after each action; auto-reappears at the next interval
+- Draggable from any non-button area
+- No Dock icon, no menu-bar icon (`LSUIElement`)
+- Prefs and stats stored in `~/Library/Application Support/MoveReminder/`
 
-Accessibility permission is not required. If the window never stays above other apps, check **System Settings -> Desktop & Dock**, and avoid a full-screen Space that hides floating windows.
+---
 
-## 3 ways to run
-1. Shell command
+## Building
+
+### Option A — Xcode (recommended)
+
+1. Open `MoveReminder.xcodeproj` in Xcode 15 or later.
+2. Select the **MoveReminder** scheme.
+3. Press **⌘R** to run, or **Product → Archive** to produce a distributable `.app`.
+
+If Xcode asks about signing, choose **Automatically manage signing** and pick
+your personal team (a free Apple ID works for local use).
+
+### Option B — command line
 
 ```bash
-chmod +x run.command
-./run.command
-```
-
-2. Python
-
-```bash
-python3 app.py
-```
-
-
-3. Build a Mac app
-
-```bash
-chmod +x build.sh
 ./build.sh
 ```
 
-Output: `dist/Move Reminder.app`
+The built app lands at `build/Build/Products/Release/Move Reminder.app`.
+Drag it to `/Applications`, then **right-click → Open** on first launch to
+bypass Gatekeeper.
 
-Drag it to Applications. First launch: right-click the app -> **Open** (Gatekeeper). It is set as a menu-bar-style agent (`LSUIElement`), so it may not show a Dock icon.
+---
 
-To start at login: System Settings -> General -> Login Items -> add **Move Reminder**.
+## Keyboard shortcuts
 
-# Usage:
-- Drag to move on screen.
-- **Completed** marks the prompt done and hides until the next interval.
-- **Ignore** skips it (counts as ignored) and hides until the next interval.
-- **Lunch** / **Back**: Lunch pauses prompts, keeps the widget visible with an away message, and does not count against you. Tap **Back** to resume.
-- **Setup** (or the hours line): change start/end (default 9:00 AM-5:00 PM) and interval (default 20 minutes).
-- After the shift, the widget shows that day's completed vs ignored tally and a pep talk from the completion rate (completed / completed + ignored). Lunch skips do not count.
-- **Esc**, Cmd-H, or Cmd-W acts like Ignore. **Cmd-Q** quits.
+| Key | Action |
+|-----|--------|
+| Escape | Ignore current prompt |
+| ⌘W / ⌘H | Ignore current prompt |
+| ⌘Q | Quit |
 
-Hours, interval, and the daily tally are saved under `~/Library/Application Support/MoveReminder/`.
+---
 
-## Credits
+## File layout
 
-Created by N3k0ryn, motivations and exercise tips with [Skartron](https://github.com/Skartron).
+```
+MoveReminder-Mac/
+├── MoveReminder.xcodeproj/
+│   ├── project.pbxproj
+│   └── xcshareddata/xcschemes/MoveReminder.xcscheme
+├── MoveReminder/
+│   ├── MoveReminderApp.swift   — @main entry point + AppDelegate
+│   ├── FloatingPanel.swift     — borderless always-on-top NSPanel
+│   ├── AppViewModel.swift      — all state, timer, and action logic
+│   ├── Content.swift           — exercise / motivation strings & palettes
+│   ├── Models.swift            — Prefs, Stats (Codable) + utility functions
+│   ├── MainView.swift          — main SwiftUI panel + Color(hex:) extension
+│   ├── SettingsView.swift      — shift-setup SwiftUI panel
+│   └── Info.plist
+├── build.sh
+├── CHANGELOG.md
+└── README.md
+```
 
-## License
+---
 
-[MIT](LICENSE).
+## Data files
+
+| File | Contents |
+|------|----------|
+| `~/Library/Application Support/MoveReminder/prefs.json` | Shift hours and interval |
+| `~/Library/Application Support/MoveReminder/stats.json` | Today's completed/ignored counts |
+
+Both files are plain JSON and reset automatically when a new day begins.
