@@ -185,7 +185,7 @@ final class AppViewModel: ObservableObject {
     }
 
     var hoursLabel: String {
-        MoveReminder_Mac.hoursLabel(start: prefs.startHour, end: prefs.endHour)
+        hoursLabel(start: prefs.startHour, end: prefs.endHour)
     }
 
     var titleLine: String {
