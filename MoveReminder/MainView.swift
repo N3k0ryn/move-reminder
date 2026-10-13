@@ -62,7 +62,7 @@ struct MainView: View {
                 .padding(.top, 2)
 
             // ── Work hours (tap → settings) ──────────────────────────
-            Text(vm.hoursLabel)
+            Text(vm.shiftHoursLabel)
                 .font(.system(size: 12))
                 .foregroundStyle(Color(hex: "ffe8c8"))
                 .padding(.horizontal, 14)

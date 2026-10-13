@@ -184,7 +184,7 @@ final class AppViewModel: ObservableObject {
         TimeZone.current.abbreviation() ?? TimeZone.current.identifier
     }
 
-    var hoursLabel: String {
+    var shiftHoursLabel: String {
         hoursLabel(start: prefs.startHour, end: prefs.endHour)
     }
 
