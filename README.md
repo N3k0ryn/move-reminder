@@ -89,3 +89,6 @@ MoveReminder-Mac/
 | `~/Library/Application Support/MoveReminder/stats.json` | Today's completed/ignored counts |
 
 Both files are plain JSON and reset automatically when a new day begins.
+
+AcknowledgementsL
+Exercises and Motivational Messages contributions by Skarton <3
