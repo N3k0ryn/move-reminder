@@ -38,6 +38,7 @@ your personal team (a free Apple ID works for local use).
 ### Option B — command line
 
 ```bash
+chmod +x build.sh
 ./build.sh
 ```
 
