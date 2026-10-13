@@ -2,7 +2,6 @@ import SwiftUI
 
 let APP_VERSION = "1.3.0"
 let APP_NAME    = "Move Reminder"
-let MADE_WITH   = "Made with Cursor ♥"
 
 // MARK: - Exercise prompts
 

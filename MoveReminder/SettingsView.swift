@@ -62,9 +62,6 @@ struct SettingsView: View {
 
             // ── Footer ────────────────────────────────────────────────
             HStack(alignment: .bottom) {
-                Text(MADE_WITH)
-                    .font(.system(size: 9))
-                    .foregroundStyle(Color(hex: "ffe8c8"))
                 Spacer()
                 Button("Done") { vm.closeSettings() }
                     .font(.system(size: 12, weight: .bold))
