@@ -2,7 +2,7 @@
 
 An always-on-top 4 × 3 inch floating panel for macOS that prompts you to move
 every 20 or 30 minutes during your workday.  No menu-bar icon, no Dock icon —
-just a quiet, draggable strip that stays out of the way until it's time to move.
+just a quiet, draggable window that stays out of the way until it's time to move.
 
 Built with **Swift + SwiftUI + AppKit**.  Requires macOS 13 Ventura or later.
 
