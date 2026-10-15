@@ -98,5 +98,9 @@ MoveReminder-Mac/
 
 Both files are plain JSON and reset automatically when a new day begins.
 
-AcknowledgementsL
+## Acknowledgements
 Exercises and Motivational Messages contributions by Skarton <3
+
+## License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
