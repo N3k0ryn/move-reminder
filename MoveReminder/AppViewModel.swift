@@ -42,7 +42,11 @@ final class AppViewModel: ObservableObject {
         startTimer()
     }
 
-    deinit { timer?.invalidate() }
+    deinit {
+        timer?.invalidate()
+        // Clear stats on quit instead of saving to disk
+        stats = Stats(date: Stats.dayKey(Date()), completed: 0, ignored: 0)
+    }
 
     // MARK: - Timer
 
@@ -106,9 +110,8 @@ final class AppViewModel: ObservableObject {
             let hour = Calendar.current.component(.hour, from: now)
             if hour >= prefs.endHour {
                 let tally      = "Shift tally · \(stats.completed) completed · \(stats.ignored) ignored"
-                let pep        = tallyPep(completed: stats.completed, ignored: stats.ignored)
-                reminderText   = "\(tally). \(pep)"
-                motivationText = pep
+                reminderText   = tally
+                motivationText = ""
             } else {
                 reminderText   = pickLine(OFF_HOURS, slot: slot)
                 motivationText = pickLine(motivLines, slot: slot)
@@ -122,7 +125,6 @@ final class AppViewModel: ObservableObject {
         guard activePanel == .main else { return }
         if isWorkHours(date: currentTime) && !isOnLunch {
             stats.completed += 1
-            stats.save()
         }
         hideUntilNextSlot()
     }
@@ -131,7 +133,6 @@ final class AppViewModel: ObservableObject {
         guard activePanel == .main else { return }
         if isWorkHours(date: currentTime) && !isOnLunch {
             stats.ignored += 1
-            stats.save()
         }
         hideUntilNextSlot()
     }
@@ -201,7 +202,6 @@ final class AppViewModel: ObservableObject {
         if stats.date != key {
             stats      = Stats(date: key, completed: 0, ignored: 0)
             hasGreeted = false
-            stats.save()
         }
     }
 
