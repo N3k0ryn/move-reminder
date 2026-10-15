@@ -14,13 +14,13 @@ Built with **Swift + SwiftUI + AppKit**.  Requires macOS 13 Ventura or later.
 - Morning and afternoon exercise prompt rotations (shuffled per day)
 - Morning and afternoon motivational quotes (shuffled per day)
 - Gradient background that changes colour with each interval
-- Completed / Ignore / Lunch tracking — daily stats saved to disk
+- Completed / Ignore / Lunch tracking — stats displayed during app session; reset to zero on quit
 - Configurable shift start/end (6 AM – 11 AM start, 1 PM – 8 PM end)
 - 20 or 30 minute reminder interval
 - Auto-hides after each action; auto-reappears at the next interval
 - Draggable from any non-button area
 - No Dock icon, no menu-bar icon (`LSUIElement`)
-- Prefs and stats stored in `~/Library/Application Support/MoveReminder/`
+- Prefs stored in `~/Library/Application Support/MoveReminder/` (persisted between launches); stats displayed during app session; reset to zero on quit
 
 ---
 
@@ -93,10 +93,9 @@ MoveReminder-Mac/
 
 | File | Contents |
 |------|----------|
-| `~/Library/Application Support/MoveReminder/prefs.json` | Shift hours and interval |
-| `~/Library/Application Support/MoveReminder/stats.json` | Today's completed/ignored counts |
+| `~/Library/Application Support/MoveReminder/prefs.json` | Shift hours and interval (persisted between launches) |
 
-Both files are plain JSON and reset automatically when a new day begins.
+Stats are displayed in-app during the current session only; they reset to zero when the app quits and are not persisted to disk.
 
 ## Acknowledgements
 Exercises and Motivational Messages contributions by Skarton <3
