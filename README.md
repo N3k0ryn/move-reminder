@@ -26,9 +26,9 @@ Built with **Swift + SwiftUI + AppKit**.  Requires macOS 13 Ventura or later.
 
 ## Screenshots
 
-![Move Reminder panel](movereminder.png =300x)
+![Move Reminder panel](screenshots/movereminder.png)
 
-![End of Day Tally](eod_tally.png =300x)
+![End of Day Tally](screenshots/eod_tally.png)
 
 ---
 
