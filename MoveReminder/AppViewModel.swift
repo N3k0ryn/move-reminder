@@ -45,7 +45,7 @@ final class AppViewModel: ObservableObject {
     deinit {
         timer?.invalidate()
         // Clear stats on quit instead of saving to disk
-        stats = Stats(date: Stats.dayKey(Date()), completed: 0, ignored: 0)
+        stats = Stats(date: AppViewModel.dayKey(Date()), completed: 0, ignored: 0)
     }
 
     // MARK: - Timer
